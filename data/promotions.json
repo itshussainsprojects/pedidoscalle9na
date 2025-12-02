@@ -1,0 +1,34 @@
+[
+  {
+    "item_id": "promo_2_hamburguesas_clasicas",
+    "name_es": "PROMO: 2 hamburguesas clásicas + 2 papas + 2 colitas $10",
+    "category": "Promociones",
+    "notes_kitchen": "2 hamburguesas clásicas, 2 papas fritas, 2 colas. Precio $10.",
+    "active": true,
+    "priority": 1
+  },
+  {
+    "item_id": "promo_1_sanduche_lomo_1_choripan",
+    "name_es": "PROMO: 1 sánduche de lomo + 1 choripán $10",
+    "category": "Promociones",
+    "notes_kitchen": "1 sánduche de lomo, 1 choripán. Precio $10.",
+    "active": true,
+    "priority": 2
+  },
+  {
+    "item_id": "promo_1_sanduche_pollo_1_choripan",
+    "name_es": "PROMO: 1 sánduche de pollo + 1 choripán $9",
+    "category": "Promociones",
+    "notes_kitchen": "1 sánduche de pollo, 1 choripán. Precio $9.",
+    "active": true,
+    "priority": 3
+  },
+  {
+    "item_id": "promo_4_club_verde",
+    "name_es": "PROMO: 4 Club Verde en $8",
+    "category": "Promociones",
+    "notes_kitchen": "4 cervezas Club Verde. Precio $8.",
+    "active": true,
+    "priority": 4
+  }
+]

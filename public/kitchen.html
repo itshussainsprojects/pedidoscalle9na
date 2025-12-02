@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calle Novena - Cocina</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    main.kitchen-layout {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #111;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-header {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .order-card {
+      border-radius: 8px;
+      border: 1px solid #333;
+      padding: 0.6rem 0.75rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .order-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .order-line {
+      margin: 0.1rem 0;
+    }
+
+    .order-line.comments {
+      font-style: italic;
+    }
+
+    .order-line.allergies {
+      font-weight: 500;
+    }
+
+    .order-items {
+      margin: 0.25rem 0;
+    }
+
+    .order-meta {
+      font-size: 0.78rem;
+      opacity: 0.85;
+    }
+
+    .btn-small {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.25rem;
+    }
+
+    .btn-ready {
+      background: #22c55e;
+      color: #000;
+    }
+
+    .btn-ready:hover {
+      background: #16a34a;
+    }
+
+    @media (max-width: 900px) {
+      .columns {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Calle Novena - Cocina</h1>
+    <!-- <nav style="display: flex; gap: 1rem; align-items: center;">
+      <a href="/client.html" style="color: #f9fafb; text-decoration: none; font-size: 0.9rem;">Cliente</a>
+      <a href="/waiter.html" style="color: #f9fafb; text-decoration: none; font-size: 0.9rem;">Mesero</a>
+      <a href="/kitchen.html" style="color: #f9fafb; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-bottom: 2px solid #dc2626;">Cocina</a>
+    </nav> -->
+  </header>
+
+  <main class="kitchen-layout">
+    <section class="columns">
+      <div class="card">
+        <div class="card-header">Pedidos en preparación</div>
+        <div id="prep-list">No hay pedidos en cocina.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Pedidos listos</div>
+        <div id="ready-list">No hay pedidos listos.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function fetchJson(url, options = {}) {
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error("HTTP " + res.status + " " + url);
+      return res.json();
+    }
+
+    function formatItems(order) {
+      if (!Array.isArray(order.items) || order.items.length === 0) {
+        return "Sin ítems.";
+      }
+      return order.items
+        .map((it) => `${it.quantity || 1} x ${it.name || "Item"}`)
+        .join(", ");
+    }
+
+    function relativeTime(iso) {
+      if (!iso) return "";
+      const diffMs = Date.now() - new Date(iso).getTime();
+      const diffMin = Math.floor(diffMs / 60000);
+      if (diffMin <= 0) return "Hace menos de 1 min";
+      return `Hace ${diffMin} min`;
+    }
+
+    function renderOrderList(containerId, orders, options = {}) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+
+      if (!orders || orders.length === 0) {
+        container.textContent = options.emptyText || "Sin pedidos.";
+        return;
+      }
+
+      orders.forEach((order) => {
+        const div = document.createElement("div");
+        div.className = "order-card";
+
+        const title = document.createElement("div");
+        title.className = "order-title";
+        const mesa = order.table || "?";
+        title.textContent = `Mesa ${mesa} · Pedido #${order.id}`;
+        div.appendChild(title);
+
+        const cliente = document.createElement("div");
+        cliente.className = "order-line";
+        cliente.textContent = `Cliente: ${order.name || "-"}`;
+        div.appendChild(cliente);
+
+        const itemsLine = document.createElement("div");
+        itemsLine.className = "order-items";
+        itemsLine.textContent = formatItems(order);
+        div.appendChild(itemsLine);
+
+        const comments = document.createElement("div");
+        comments.className = "order-line comments";
+        const commentsText = (order.comments || "").trim();
+        comments.textContent =
+          "Comentarios: " + (commentsText || "Sin comentarios");
+        div.appendChild(comments);
+
+        const allergies = document.createElement("div");
+        allergies.className = "order-line allergies";
+        const allergiesText = (order.allergies || "").trim();
+        allergies.textContent =
+          "Alergias: " +
+          (allergiesText || "Sin alergias registradas");
+        if (allergiesText) {
+          allergies.style.color = "#facc15"; // amarillo
+        }
+        div.appendChild(allergies);
+
+        const meta = document.createElement("div");
+        meta.className = "order-meta";
+        const ref =
+          options.timeField === "sent_to_kitchen_at"
+            ? order.sent_to_kitchen_at
+            : order.ready_at || order.created_at;
+        const label = options.timeLabel || "Tiempo";
+        meta.textContent = `${label}: ${relativeTime(ref)}`;
+        div.appendChild(meta);
+
+        if (options.showReadyButton) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn-small btn-ready";
+          btn.textContent = "Marcar listo";
+          btn.addEventListener("click", async () => {
+            try {
+              await fetchJson(`/api/orders/${order.id}/mark-ready`, {
+                method: "POST"
+              });
+              await refreshOrders();
+            } catch (err) {
+              console.error("Error mark-ready:", err);
+              alert("Error al marcar listo.");
+            }
+          });
+          div.appendChild(btn);
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    async function refreshOrders() {
+      try {
+        const [inKitchen, ready] = await Promise.all([
+          fetchJson("/api/orders/in-kitchen"),
+          fetchJson("/api/orders/ready")
+        ]);
+
+        renderOrderList("prep-list", inKitchen.orders, {
+          emptyText: "No hay pedidos en cocina.",
+          showReadyButton: true,
+          timeField: "sent_to_kitchen_at",
+          timeLabel: "En cocina desde"
+        });
+
+        renderOrderList("ready-list", ready.orders, {
+          emptyText: "No hay pedidos listos.",
+          timeField: "ready_at",
+          timeLabel: "Listo desde"
+        });
+      } catch (err) {
+        console.error("Error refreshing kitchen orders:", err);
+        // Show error message to user
+        const errorMsg = "⚠️ Error de conexión. Reintentando...";
+        document.getElementById("prep-list").textContent = errorMsg;
+        document.getElementById("ready-list").textContent = errorMsg;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      refreshOrders();
+      setInterval(refreshOrders, 5000);
+    });
+  </script>
+</body>
+</html>

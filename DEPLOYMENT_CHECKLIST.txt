@@ -1,0 +1,148 @@
+═══════════════════════════════════════════════════════════════
+   CALLE NOVENA - DEPLOYMENT TO NAMECHEAP CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+PRE-DEPLOYMENT
+══════════════
+☐ Node.js project is working locally
+☐ Test all pages: customer, waiter, kitchen
+☐ Menu data is correct in data/menu.csv
+☐ Promotions are set in data/promotions.json
+☐ Changed WAITER_PIN and KITCHEN_PIN in .env
+☐ Backup any important data
+
+PREPARE FILES
+═════════════
+☐ Delete node_modules folder (will reinstall on server)
+☐ Create ZIP file of entire project folder
+☐ Make sure .env file is included
+☐ Make sure data folder is included
+
+NAMECHEAP CPANEL SETUP
+══════════════════════
+☐ Login to Namecheap account
+☐ Access cPanel for your hosting
+☐ Verify domain is pointing to hosting (DNS check)
+
+UPLOAD FILES
+════════════
+☐ Open File Manager in cPanel
+☐ Go to public_html (or your domain folder)
+☐ Backup existing files (if any)
+☐ Delete old files (if starting fresh)
+☐ Upload your ZIP file
+☐ Extract ZIP file
+☐ Delete ZIP file after extraction
+☐ Verify all files are there (server.js, package.json, etc.)
+
+NODE.JS APP SETUP
+═════════════════
+☐ Find "Setup Node.js App" in cPanel
+☐ Click "Create Application"
+☐ Set Node.js version to 18.x or latest
+☐ Set Application mode to "Production"
+☐ Set Application root to your folder path
+☐ Set Application startup file to "server.js"
+☐ Add environment variables:
+   ☐ PORT = 3000
+   ☐ NODE_ENV = production
+   ☐ DB_PATH = ./data/calle_novena.db
+   ☐ TABLES_MAX = 40
+   ☐ WAITER_PIN = (your pin)
+   ☐ KITCHEN_PIN = (your pin)
+☐ Click "Create" button
+☐ Click "Run NPM Install"
+☐ Wait for installation to complete
+☐ Click "Restart" to start app
+
+SSL/HTTPS SETUP
+═══════════════
+☐ Go to SSL/TLS Status in cPanel
+☐ Click "Run AutoSSL"
+☐ Wait for SSL certificate to generate
+☐ Verify HTTPS is working
+
+FILE PERMISSIONS
+════════════════
+☐ Right-click 'data' folder in File Manager
+☐ Set permissions to 755
+☐ Apply to all subdirectories/files
+☐ Verify calle_novena.db can be created/written
+
+TESTING
+═══════
+☐ Visit https://yourdomain.com (should redirect to client page)
+☐ Visit https://yourdomain.com/waiter.html
+☐ Visit https://yourdomain.com/kitchen.html
+☐ Visit https://yourdomain.com/api/menu (should return JSON)
+☐ Test placing an order from customer page
+☐ Test approving order from waiter page
+☐ Test marking ready from kitchen page
+☐ Test on mobile device
+☐ Test on different browsers
+
+QR CODE GENERATION (Optional)
+═════════════════════════════
+For each table, create QR codes that link to:
+https://yourdomain.com/client.html?table=1
+https://yourdomain.com/client.html?table=2
+https://yourdomain.com/client.html?table=3
+... and so on
+
+Use a QR code generator like:
+- qr-code-generator.com
+- qrcode-monkey.com
+Print and place on tables!
+
+POST-DEPLOYMENT
+═══════════════
+☐ Monitor error logs in cPanel
+☐ Check application status regularly
+☐ Backup database weekly (download calle_novena.db)
+☐ Update menu as needed
+☐ Train staff on waiter/kitchen pages
+☐ Test customer flow with real users
+
+MAINTENANCE
+═══════════
+☐ Check logs weekly: Node.js App → View Logs
+☐ Restart app if needed: Node.js App → Restart
+☐ Update dependencies monthly: npm update
+☐ Backup database before making changes
+☐ Monitor disk space usage
+
+TROUBLESHOOTING
+═══════════════
+If app doesn't start:
+☐ Check Node.js App error logs
+☐ Verify all files uploaded correctly
+☐ Check environment variables
+☐ Try restarting the app
+☐ Check file permissions
+
+If database errors:
+☐ Check data folder permissions (755)
+☐ Verify DB_PATH in environment variables
+☐ Check disk space available
+
+If pages don't load:
+☐ Clear browser cache
+☐ Check .htaccess file
+☐ Verify SSL certificate active
+☐ Check application is running
+
+SUPPORT CONTACTS
+════════════════
+Namecheap Support: https://www.namecheap.com/support/
+Node.js Documentation: https://nodejs.org/docs/
+Your hosting plan details: Check Namecheap dashboard
+
+═══════════════════════════════════════════════════════════════
+                    GOOD LUCK! 🎉
+═══════════════════════════════════════════════════════════════
+
+Notes:
+- Save this checklist and check off items as you complete them
+- If you get stuck, refer to QUICK_DEPLOY.md or DEPLOYMENT_GUIDE.md
+- Keep a backup of everything before making changes
+- Test thoroughly before going live with customers

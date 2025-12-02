@@ -1,0 +1,943 @@
+{
+  "meta": {
+    "version": "v2",
+    "prices_included": false,
+    "ascii_safe": true,
+    "stations": [
+      "plancha_parrilla",
+      "caliente",
+      "freidora",
+      "bebidas"
+    ]
+  },
+  "modifier_groups": [
+    {
+      "group_id": "guarnicion_pollo_incluida",
+      "name_es": "Guarnicion (pollo 1/4 y 1/2)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "arroz_blanco",
+          "name_es": "Arroz blanco"
+        },
+        {
+          "option_id": "ensalada",
+          "name_es": "Ensalada"
+        },
+        {
+          "option_id": "papas_fritas",
+          "name_es": "Papas fritas"
+        },
+        {
+          "option_id": "frejoles",
+          "name_es": "Frejoles"
+        },
+        {
+          "option_id": "patacones",
+          "name_es": "Patacones"
+        }
+      ]
+    },
+    {
+      "group_id": "guarnicion_familiar",
+      "name_es": "Guarnicion (familiar, elegir por separado)",
+      "type": "multi",
+      "required": false,
+      "min_select": 0,
+      "max_select": 3,
+      "options": [
+        {
+          "option_id": "papas_fritas_fam",
+          "name_es": "Papas fritas (familiar)"
+        },
+        {
+          "option_id": "moro_fam",
+          "name_es": "Moro (familiar)"
+        },
+        {
+          "option_id": "arroz_lentejas_fam",
+          "name_es": "Arroz con lentejas (familiar)"
+        },
+        {
+          "option_id": "arroz_chaufa_fam",
+          "name_es": "Arroz chaufa (familiar)"
+        },
+        {
+          "option_id": "ensalada_fam",
+          "name_es": "Ensalada (familiar)"
+        }
+      ]
+    },
+    {
+      "group_id": "guarnicion_parrilla_incluida",
+      "name_es": "Guarnicion (parrilla, incluida)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "moro_lenteja",
+          "name_es": "Moro lenteja"
+        },
+        {
+          "option_id": "moro_frejol",
+          "name_es": "Moro frejol"
+        },
+        {
+          "option_id": "moro_choclo",
+          "name_es": "Moro choclo"
+        },
+        {
+          "option_id": "arroz_lentejas",
+          "name_es": "Arroz con lentejas"
+        },
+        {
+          "option_id": "arroz_frejoles",
+          "name_es": "Arroz con frejoles"
+        },
+        {
+          "option_id": "mini_taku_taku",
+          "name_es": "Mini taku taku"
+        }
+      ]
+    },
+    {
+      "group_id": "proteina_tallarines_saltado",
+      "name_es": "Proteina (tallarin saltado)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "lomo",
+          "name_es": "Lomo"
+        },
+        {
+          "option_id": "pollo",
+          "name_es": "Pollo"
+        },
+        {
+          "option_id": "mariscos",
+          "name_es": "Mariscos"
+        }
+      ]
+    },
+    {
+      "group_id": "proteina_tallarines_huancaina",
+      "name_es": "Proteina (tallarin a la huancaina)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "lomo",
+          "name_es": "Lomo"
+        },
+        {
+          "option_id": "pollo",
+          "name_es": "Pollo"
+        },
+        {
+          "option_id": "mariscos",
+          "name_es": "Mariscos"
+        }
+      ]
+    },
+    {
+      "group_id": "proteina_chicharron",
+      "name_es": "Tipo de chicharron",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "pescado",
+          "name_es": "Pescado"
+        },
+        {
+          "option_id": "camaron",
+          "name_es": "Camaron"
+        },
+        {
+          "option_id": "calamar",
+          "name_es": "Calamar"
+        }
+      ]
+    },
+    {
+      "group_id": "estilo_hotdog",
+      "name_es": "Estilo Hot Dog",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "clasico",
+          "name_es": "Clasico"
+        },
+        {
+          "option_id": "cheddar_tocino",
+          "name_es": "Cheddar y tocino"
+        },
+        {
+          "option_id": "cebolla_caramelizada",
+          "name_es": "Con cebollas caramelizadas"
+        }
+      ]
+    },
+    {
+      "group_id": "proteina_chaufa",
+      "name_es": "Proteina (chaufa)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "pollo",
+          "name_es": "Pollo"
+        },
+        {
+          "option_id": "lomo",
+          "name_es": "Lomo"
+        },
+        {
+          "option_id": "mariscos",
+          "name_es": "Mariscos"
+        },
+        {
+          "option_id": "mixto",
+          "name_es": "Mixto"
+        }
+      ]
+    },
+    {
+      "group_id": "tipo_taku_taku_montado",
+      "name_es": "Taku Taku montado con",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "lomo_saltado",
+          "name_es": "Lomo saltado"
+        },
+        {
+          "option_id": "pollo_saltado",
+          "name_es": "Pollo saltado"
+        },
+        {
+          "option_id": "seco_res",
+          "name_es": "Seco de res"
+        }
+      ]
+    },
+    {
+      "group_id": "proteina_taku_taku",
+      "name_es": "Proteina (taku taku)",
+      "type": "single",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1,
+      "options": [
+        {
+          "option_id": "lomo_saltado",
+          "name_es": "Lomo saltado"
+        },
+        {
+          "option_id": "pollo_saltado",
+          "name_es": "Pollo saltado"
+        },
+        {
+          "option_id": "seco_res",
+          "name_es": "Seco de res"
+        },
+        {
+          "option_id": "mariscos",
+          "name_es": "Mariscos"
+        }
+      ]
+    },
+    {
+      "group_id": "extras_burger",
+      "name_es": "Extras hamburguesa",
+      "type": "multi",
+      "required": false,
+      "min_select": 0,
+      "max_select": 5,
+      "options": [
+        {
+          "option_id": "huevo",
+          "name_es": "Huevo"
+        },
+        {
+          "option_id": "tocino",
+          "name_es": "Tocino"
+        },
+        {
+          "option_id": "cheddar",
+          "name_es": "Queso cheddar"
+        },
+        {
+          "option_id": "papas_al_hilo",
+          "name_es": "Papas al hilo"
+        },
+        {
+          "option_id": "cebolla_caramelizada",
+          "name_es": "Cebollas caramelizadas"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "item_id": "jalea_mixta",
+      "name_es": "Jalea mixta",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "yuquitas_huancaina",
+      "name_es": "Yuquitas a la huancaina",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "empanaditas",
+      "name_es": "Empanaditas (aji de gallina / queso / mix)",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Elegir relleno en notas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "papas_huancaina",
+      "name_es": "Papas a la huancaina",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "patacones_10u",
+      "name_es": "Patacones (10 u)",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Opcion con queso en notas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "maduros_queso_10u",
+      "name_es": "Maduros con queso (10 u)",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "chicharrones",
+      "name_es": "Chicharrones (con papas)",
+      "category": "Piqueos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "proteina_chicharron",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "tallarin_saltado",
+      "name_es": "Tallarin saltado",
+      "category": "Pastas",
+      "station_ids": "caliente",
+      "modifier_group_ids": "proteina_tallarines_saltado",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "tallarin_huancaina",
+      "name_es": "Tallarin a la huancaina",
+      "category": "Pastas",
+      "station_ids": "caliente",
+      "modifier_group_ids": "proteina_tallarines_huancaina",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "hot_dog",
+      "name_es": "Hot dog",
+      "category": "Fast Food",
+      "station_ids": "caliente",
+      "modifier_group_ids": "estilo_hotdog",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "kids_chicken_fingers_3",
+      "name_es": "Chicken Fingers (3)",
+      "category": "Kids",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "kids_cheeseburger",
+      "name_es": "Cheeseburger (Kids)",
+      "category": "Kids",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "kids_choripapa",
+      "name_es": "Choripapa (Kids)",
+      "category": "Kids",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "lomo_saltado",
+      "name_es": "Lomo saltado",
+      "category": "Criollos",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "taku_taku_montado",
+      "name_es": "Taku Taku montado",
+      "category": "Criollos",
+      "station_ids": "caliente",
+      "modifier_group_ids": "tipo_taku_taku_montado",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "aji_gallina",
+      "name_es": "Aji de gallina",
+      "category": "Criollos",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "seco_res",
+      "name_es": "Seco de res",
+      "category": "Criollos",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "anticucho_corazon_res",
+      "name_es": "Anticucho de corazon de res",
+      "category": "Criollos",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pescado_apanado",
+      "name_es": "Pescado apanado",
+      "category": "Criollos",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "taku_taku",
+      "name_es": "Taku Taku",
+      "category": "Criollos",
+      "station_ids": "caliente",
+      "modifier_group_ids": "proteina_taku_taku",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "chaufa",
+      "name_es": "Arroz chaufa",
+      "category": "Arroces",
+      "station_ids": "caliente",
+      "modifier_group_ids": "proteina_chaufa",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pollo_cuarto",
+      "name_es": "Pollo 1/4 (+2 guarniciones)",
+      "category": "Pollo",
+      "station_ids": "caliente",
+      "modifier_group_ids": "guarnicion_pollo_incluida",
+      "notes_kitchen": "Incluye 2 guarniciones",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pollo_medio",
+      "name_es": "Pollo 1/2 (+2 guarniciones)",
+      "category": "Pollo",
+      "station_ids": "caliente",
+      "modifier_group_ids": "guarnicion_pollo_incluida",
+      "notes_kitchen": "Incluye 2 guarniciones",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pollo_entero",
+      "name_es": "Familiar (pollo entero)",
+      "category": "Pollo",
+      "station_ids": "caliente",
+      "modifier_group_ids": "guarnicion_familiar",
+      "notes_kitchen": "No incluye guarniciones; agregar familiares",
+      "is_promo": true,
+      "active": true
+    },
+    {
+      "item_id": "ad_papas_fritas",
+      "name_es": "Papas fritas (porcion)",
+      "category": "Adicionales",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_maduro_frito_6u",
+      "name_es": "Maduro frito (6 u)",
+      "category": "Adicionales",
+      "station_ids": "freidora",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_moro",
+      "name_es": "Moro (porcion)",
+      "category": "Adicionales",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_arroz_blanco",
+      "name_es": "Arroz blanco (porcion)",
+      "category": "Adicionales",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_frejoles",
+      "name_es": "Frejoles (porcion)",
+      "category": "Adicionales",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_lentejas",
+      "name_es": "Lentejas (porcion)",
+      "category": "Adicionales",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_taku_taku",
+      "name_es": "Taku Taku (adicional)",
+      "category": "Adicionales",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "ad_huevo_frito",
+      "name_es": "Huevo frito",
+      "category": "Adicionales",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "parr_filete_pollo",
+      "name_es": "Filete de pollo (parrilla)",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "guarnicion_parrilla_incluida",
+      "notes_kitchen": "Incluye 1 guarnicion",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "parr_lomo_asado",
+      "name_es": "Lomo de asado",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "guarnicion_parrilla_incluida",
+      "notes_kitchen": "Incluye 1 guarnicion",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "parr_lomo_fino",
+      "name_es": "Lomo fino",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "guarnicion_parrilla_incluida",
+      "notes_kitchen": "Incluye 1 guarnicion",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pincho_pollo",
+      "name_es": "Pincho de pollo",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pincho_lomo_fino",
+      "name_es": "Pincho de lomo fino",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pincho_camaron",
+      "name_es": "Pincho de camaron",
+      "category": "Parrilla",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sw_lomito_saltado",
+      "name_es": "Lomito saltado (sandwich)",
+      "category": "Sandwiches",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Incluye papas fritas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sw_pollito_saltado",
+      "name_es": "Pollito saltado (sandwich)",
+      "category": "Sandwiches",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Incluye papas fritas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sw_choripan",
+      "name_es": "Choripan",
+      "category": "Sandwiches",
+      "station_ids": "plancha_parrilla",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Incluye papas fritas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sw_lomo_pituco",
+      "name_es": "Lomo pituco",
+      "category": "Sandwiches",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Incluye papas fritas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sw_chicharron_calamar",
+      "name_es": "Chicharron de calamar (sandwich)",
+      "category": "Sandwiches",
+      "station_ids": "caliente",
+      "modifier_group_ids": "",
+      "notes_kitchen": "Incluye papas fritas",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "hb_calle_novena",
+      "name_es": "Hamburguesa Calle Novena",
+      "category": "Hamburguesas",
+      "station_ids": "caliente",
+      "modifier_group_ids": "extras_burger",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "hb_montada",
+      "name_es": "Hamburguesa Montada",
+      "category": "Hamburguesas",
+      "station_ids": "caliente",
+      "modifier_group_ids": "extras_burger",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "hb_clasica",
+      "name_es": "Hamburguesa Clasica",
+      "category": "Hamburguesas",
+      "station_ids": "caliente",
+      "modifier_group_ids": "extras_burger",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "agua_natural",
+      "name_es": "Agua natural",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "agua_mineral",
+      "name_es": "Agua mineral",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "fusti",
+      "name_es": "Fusti (te)",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "colas",
+      "name_es": "Colas",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "jugo_limon",
+      "name_es": "Jugo de limon",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "jugo_maracuya",
+      "name_es": "Jugo de maracuya",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "chicha_morada",
+      "name_es": "Chicha morada",
+      "category": "Bebidas frias",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "cafe_expresso",
+      "name_es": "Cafe expresso",
+      "category": "Bebidas calientes",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "cafe_americano",
+      "name_es": "Cafe americano",
+      "category": "Bebidas calientes",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "agua_aromatica",
+      "name_es": "Agua aromatica",
+      "category": "Bebidas calientes",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pisco_sour_limon",
+      "name_es": "Pisco sour (limon)",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pisco_sour_maracuya",
+      "name_es": "Pisco sour (maracuya)",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "pisco_sour_chicha",
+      "name_es": "Pisco sour (chicha morada)",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sangria_copa",
+      "name_es": "Sangria (copa)",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "sangria_jarra",
+      "name_es": "Sangria (jarra)",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "cerveza_club",
+      "name_es": "Cerveza Club",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "cerveza_stella",
+      "name_es": "Cerveza Stella",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    },
+    {
+      "item_id": "cerveza_corona",
+      "name_es": "Cerveza Corona",
+      "category": "Con alcohol",
+      "station_ids": "bebidas",
+      "modifier_group_ids": "",
+      "notes_kitchen": "",
+      "is_promo": false,
+      "active": true
+    }
+  ]
+}

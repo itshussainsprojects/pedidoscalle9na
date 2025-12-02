@@ -1,0 +1,199 @@
+/* ===== Calle 9 Global Theme ===== */
+
+/* 1. Brand colors (red-white-black) */
+:root {
+  --c9-red: #b00000;
+  --c9-red-dark: #7a0000;
+  --c9-black: #111111;
+  --c9-white: #ffffff;
+  --c9-gray-light: #f5f5f5;
+  --c9-gray: #888888;
+}
+
+/* 2. Base layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--c9-gray-light);
+  color: var(--c9-black);
+}
+
+/* Page wrapper for all screens */
+.c9-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, var(--c9-white), var(--c9-gray-light));
+}
+
+/* Top bar / header */
+.c9-header {
+  background: var(--c9-red);
+  color: var(--c9-white);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.c9-header__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.c9-header__subtitle {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Main content area */
+.c9-main {
+  flex: 1;
+  padding: 12px 16px 16px;
+}
+
+/* 3. Cards (for orders, sections, etc.) */
+.c9-card {
+  background: var(--c9-white);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* 4. Buttons */
+.c9-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition:
+    transform 0.05s ease-out,
+    box-shadow 0.12s ease-out,
+    background 0.12s ease-out,
+    color 0.12s ease-out,
+    border-color 0.12s ease-out;
+}
+
+.c9-btn:active {
+  transform: scale(0.97);
+}
+
+/* Primary (red) */
+.c9-btn--primary {
+  background: var(--c9-red);
+  color: var(--c9-white);
+  box-shadow: 0 3px 8px rgba(176, 0, 0, 0.4);
+}
+
+.c9-btn--primary:hover {
+  background: var(--c9-red-dark);
+}
+
+/* Secondary (white with red border) */
+.c9-btn--secondary {
+  background: var(--c9-white);
+  color: var(--c9-red);
+  border-color: var(--c9-red);
+}
+
+/* Ghost (for filters, status pills) */
+.c9-btn--ghost {
+  background: transparent;
+  color: var(--c9-black);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Full-width utility */
+.c9-btn--full {
+  width: 100%;
+}
+
+/* 5. Inputs / textareas */
+.c9-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.c9-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--c9-black);
+}
+
+.c9-field input,
+.c9-field textarea,
+.c9-field select {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--c9-white);
+}
+
+.c9-field input:focus,
+.c9-field textarea:focus,
+.c9-field select:focus {
+  border-color: var(--c9-red);
+  box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.15);
+}
+
+/* 6. "Danger" note (for allergies) */
+.c9-note {
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #f6f6f6;
+  margin-top: 6px;
+}
+
+.c9-note--danger {
+  background: #ffe5e5;
+  border: 1px solid #ff9999;
+  color: #7a0000;
+}
+
+.c9-note__label {
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+/* 7. Simple badges */
+.c9-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.c9-badge--danger {
+  background: var(--c9-red);
+  color: var(--c9-white);
+}
+
+.c9-badge--muted {
+  background: #e0e0e0;
+  color: #333;
+}

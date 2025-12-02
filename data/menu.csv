@@ -1,0 +1,65 @@
+item_id,category,name_es,station_ids,modifier_group_ids,notes_kitchen,is_promo,active
+jalea_mixta,Piqueos,Jalea mixta,freidora,,,False,True
+yuquitas_huancaina,Piqueos,Yuquitas a la huancaina,freidora,,,False,True
+empanaditas,Piqueos,Empanaditas (aji de gallina / queso / mix),freidora,,Elegir relleno en notas,False,True
+papas_huancaina,Piqueos,Papas a la huancaina,freidora,,,False,True
+patacones_10u,Piqueos,Patacones (10 u),freidora,,Opcion con queso en notas,False,True
+maduros_queso_10u,Piqueos,Maduros con queso (10 u),freidora,,,False,True
+chicharrones,Piqueos,Chicharrones (con papas),freidora,proteina_chicharron,,False,True
+tallarin_saltado,Pastas,Tallarin saltado,caliente,proteina_tallarines_saltado,,False,True
+tallarin_huancaina,Pastas,Tallarin a la huancaina,caliente,proteina_tallarines_huancaina,,False,True
+hot_dog,Fast Food,Hot dog,caliente,estilo_hotdog,,False,True
+kids_chicken_fingers_3,Kids,Chicken Fingers (3),freidora,,,False,True
+kids_cheeseburger,Kids,Cheeseburger (Kids),caliente,,,False,True
+kids_choripapa,Kids,Choripapa (Kids),freidora,,,False,True
+lomo_saltado,Criollos,Lomo saltado,caliente,,,False,True
+taku_taku_montado,Criollos,Taku Taku montado,caliente,tipo_taku_taku_montado,,False,True
+aji_gallina,Criollos,Aji de gallina,caliente,,,False,True
+seco_res,Criollos,Seco de res,caliente,,,False,True
+anticucho_corazon_res,Criollos,Anticucho de corazon de res,plancha_parrilla,,,False,True
+pescado_apanado,Criollos,Pescado apanado,freidora,,,False,True
+taku_taku,Criollos,Taku Taku,caliente,proteina_taku_taku,,False,True
+chaufa,Arroces,Arroz chaufa,caliente,proteina_chaufa,,False,True
+pollo_cuarto,Pollo,Pollo 1/4 (+2 guarniciones),caliente,guarnicion_pollo_incluida,Incluye 2 guarniciones,False,True
+pollo_medio,Pollo,Pollo 1/2 (+2 guarniciones),caliente,guarnicion_pollo_incluida,Incluye 2 guarniciones,False,True
+pollo_entero,Pollo,Familiar (pollo entero),caliente,guarnicion_familiar,No incluye guarniciones; agregar familiares,True,True
+ad_papas_fritas,Adicionales,Papas fritas (porcion),freidora,,,False,True
+ad_maduro_frito_6u,Adicionales,Maduro frito (6 u),freidora,,,False,True
+ad_moro,Adicionales,Moro (porcion),caliente,,,False,True
+ad_arroz_blanco,Adicionales,Arroz blanco (porcion),caliente,,,False,True
+ad_frejoles,Adicionales,Frejoles (porcion),caliente,,,False,True
+ad_lentejas,Adicionales,Lentejas (porcion),caliente,,,False,True
+ad_taku_taku,Adicionales,Taku Taku (adicional),caliente,,,False,True
+ad_huevo_frito,Adicionales,Huevo frito,plancha_parrilla,,,False,True
+parr_filete_pollo,Parrilla,Filete de pollo (parrilla),plancha_parrilla,guarnicion_parrilla_incluida,Incluye 1 guarnicion,False,True
+parr_lomo_asado,Parrilla,Lomo de asado,plancha_parrilla,guarnicion_parrilla_incluida,Incluye 1 guarnicion,False,True
+parr_lomo_fino,Parrilla,Lomo fino,plancha_parrilla,guarnicion_parrilla_incluida,Incluye 1 guarnicion,False,True
+pincho_pollo,Parrilla,Pincho de pollo,plancha_parrilla,,,False,True
+pincho_lomo_fino,Parrilla,Pincho de lomo fino,plancha_parrilla,,,False,True
+pincho_camaron,Parrilla,Pincho de camaron,plancha_parrilla,,,False,True
+sw_lomito_saltado,Sandwiches,Lomito saltado (sandwich),caliente,,Incluye papas fritas,False,True
+sw_pollito_saltado,Sandwiches,Pollito saltado (sandwich),caliente,,Incluye papas fritas,False,True
+sw_choripan,Sandwiches,Choripan,plancha_parrilla,,Incluye papas fritas,False,True
+sw_lomo_pituco,Sandwiches,Lomo pituco,caliente,,Incluye papas fritas,False,True
+sw_chicharron_calamar,Sandwiches,Chicharron de calamar (sandwich),caliente,,Incluye papas fritas,False,True
+hb_calle_novena,Hamburguesas,Hamburguesa Calle Novena,caliente,extras_burger,,False,True
+hb_montada,Hamburguesas,Hamburguesa Montada,caliente,extras_burger,,False,True
+hb_clasica,Hamburguesas,Hamburguesa Clasica,caliente,extras_burger,,False,True
+agua_natural,Bebidas frias,Agua natural,bebidas,,,False,True
+agua_mineral,Bebidas frias,Agua mineral,bebidas,,,False,True
+fusti,Bebidas frias,Fusti (te),bebidas,,,False,True
+colas,Bebidas frias,Colas,bebidas,,,False,True
+jugo_limon,Bebidas frias,Jugo de limon,bebidas,,,False,True
+jugo_maracuya,Bebidas frias,Jugo de maracuya,bebidas,,,False,True
+chicha_morada,Bebidas frias,Chicha morada,bebidas,,,False,True
+cafe_expresso,Bebidas calientes,Cafe expresso,bebidas,,,False,True
+cafe_americano,Bebidas calientes,Cafe americano,bebidas,,,False,True
+agua_aromatica,Bebidas calientes,Agua aromatica,bebidas,,,False,True
+pisco_sour_limon,Con alcohol,Pisco sour (limon),bebidas,,,False,True
+pisco_sour_maracuya,Con alcohol,Pisco sour (maracuya),bebidas,,,False,True
+pisco_sour_chicha,Con alcohol,Pisco sour (chicha morada),bebidas,,,False,True
+sangria_copa,Con alcohol,Sangria (copa),bebidas,,,False,True
+sangria_jarra,Con alcohol,Sangria (jarra),bebidas,,,False,True
+cerveza_club,Con alcohol,Cerveza Club,bebidas,,,False,True
+cerveza_stella,Con alcohol,Cerveza Stella,bebidas,,,False,True
+cerveza_corona,Con alcohol,Cerveza Corona,bebidas,,,False,True
