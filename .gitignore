@@ -10,3 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 .pm2/
 pm2-*.log
+.vercel
+data/*.db
+data/*.db-shm
+data/*.db-wal

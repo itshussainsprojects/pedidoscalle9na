@@ -1,12 +1,40 @@
-// server.js - Calle Novena (menú desde CSV + flujo cliente → mesero → cocina)
+// server.js - Calle Novena (MongoDB + full CRUD)
 require("dotenv").config();
 
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
+const connectDB = require("./config/database");
+const Order = require("./models/Order");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+connectDB();
+
+// --- Auto-cleanup: Delete orders older than 24 hours ---
+async function cleanupOldOrders() {
+  try {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    
+    const result = await Order.deleteMany({
+      created_at: { $lt: twentyFourHoursAgo }
+    });
+    
+    if (result.deletedCount > 0) {
+      console.log(`🗑️ Cleaned up ${result.deletedCount} orders older than 24 hours`);
+    }
+  } catch (err) {
+    console.error('❌ Error cleaning up old orders:', err);
+  }
+}
+
+// Run cleanup every hour
+setInterval(cleanupOldOrders, 60 * 60 * 1000); // 1 hour
+
+// Run cleanup on server start
+cleanupOldOrders();
 
 // --- Middlewares ---
 app.use(express.json());
@@ -110,117 +138,281 @@ app.get("/api/menu", (req, res) => {
   res.json({ items: cachedMenuItems });
 });
 
-// --- ÓRDENES: en memoria con estados ---
-let orders = [];
-let nextOrderId = 1;
+// --- ÓRDENES: MongoDB con CRUD completo ---
 
-function findOrder(id) {
-  const numId = Number(id);
-  if (Number.isNaN(numId)) return null;
-  return orders.find((o) => o.id === numId) || null;
-}
-
-// Cliente envía pedido → queda "pending_waiter"
-app.post("/api/orders", (req, res) => {
+// CREATE: Cliente envía pedido → queda "pending_waiter"
+app.post("/api/orders", async (req, res) => {
   try {
     const body = req.body || {};
-    const nowIso = new Date().toISOString();
 
-    const order = {
-      id: nextOrderId++,
-      created_at: nowIso,
-      status: "pending_waiter", // primero mesero
+    // Validate items
+    if (!body.items || !Array.isArray(body.items) || body.items.length === 0) {
+      return res.status(400).json({ 
+        ok: false, 
+        message: "El pedido debe tener al menos un ítem." 
+      });
+    }
+
+    // Create order
+    const order = new Order({
       table: body.table || null,
       name: body.name || null,
       comments: body.comments || null,
       allergies: body.allergies || null,
-      items: Array.isArray(body.items) ? body.items : [],
-      sent_to_kitchen_at: null,
-      ready_at: null,
-      delivered_at: null
-    };
+      items: body.items,
+      status: "pending_waiter"
+    });
 
-    orders.push(order);
-    console.log("[ORDERS] New order from client:", order);
+    await order.save();
+    
+    console.log(`[ORDERS] New order created: #${order.orderNumber}`);
 
     res.json({
       ok: true,
-      message: `Pedido #${order.id} enviado al mesero.`,
-      orderId: order.id
+      message: `Pedido #${order.orderNumber} enviado al mesero.`,
+      orderId: order.orderNumber,
+      order: order.toJSON()
     });
   } catch (err) {
     console.error("Error in POST /api/orders:", err);
-    res
-      .status(500)
-      .json({ ok: false, message: "Error interno al crear la orden." });
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error interno al crear la orden.",
+      error: err.message 
+    });
   }
 });
 
-// listado completo (debug)
-app.get("/api/orders", (req, res) => {
-  res.json({ orders });
-});
-
-// Para pantalla de mesero / cocina
-app.get("/api/orders/pending-waiter", (req, res) => {
-  res.json({ orders: orders.filter((o) => o.status === "pending_waiter") });
-});
-
-app.get("/api/orders/in-kitchen", (req, res) => {
-  res.json({ orders: orders.filter((o) => o.status === "in_kitchen") });
-});
-
-app.get("/api/orders/ready", (req, res) => {
-  res.json({
-    orders: orders.filter(
-      (o) => o.status === "ready" || o.status === "delivered"
-    )
-  });
-});
-
-// Mesero aprueba → pasa a cocina
-app.post("/api/orders/:id/send-to-kitchen", (req, res) => {
-  const order = findOrder(req.params.id);
-  if (!order) {
-    return res
-      .status(404)
-      .json({ ok: false, message: "Orden no encontrada." });
+// READ: Listado completo (debug/admin)
+app.get("/api/orders", async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .sort({ created_at: -1 })
+      .lean();
+    
+    res.json({ 
+      ok: true,
+      orders: orders.map(o => ({
+        ...o,
+        id: o._id.toString(),
+        _id: undefined
+      }))
+    });
+  } catch (err) {
+    console.error("Error in GET /api/orders:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al obtener órdenes.",
+      error: err.message 
+    });
   }
-  order.status = "in_kitchen";
-  order.sent_to_kitchen_at = new Date().toISOString();
-  console.log("[ORDERS] Order sent to kitchen:", order.id);
-  res.json({ ok: true, message: `Pedido #${order.id} enviado a cocina.` });
 });
 
-// Cocina marca como listo
-app.post("/api/orders/:id/mark-ready", (req, res) => {
-  const order = findOrder(req.params.id);
-  if (!order) {
-    return res
-      .status(404)
-      .json({ ok: false, message: "Orden no encontrada." });
+// READ: Para pantalla de mesero - Pedidos pendientes
+app.get("/api/orders/pending-waiter", async (req, res) => {
+  try {
+    const orders = await Order.find({ status: "pending_waiter" })
+      .sort({ created_at: -1 })
+      .lean();
+    
+    res.json({ 
+      ok: true,
+      orders: orders.map(o => ({
+        ...o,
+        id: o._id.toString(),
+        _id: undefined
+      }))
+    });
+  } catch (err) {
+    console.error("Error in GET /api/orders/pending-waiter:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al obtener pedidos pendientes.",
+      error: err.message 
+    });
   }
-  order.status = "ready";
-  order.ready_at = new Date().toISOString();
-  console.log("[ORDERS] Order marked ready:", order.id);
-  res.json({ ok: true, message: `Pedido #${order.id} marcado como listo.` });
 });
 
-// Mesero marca como entregado
-app.post("/api/orders/:id/mark-delivered", (req, res) => {
-  const order = findOrder(req.params.id);
-  if (!order) {
-    return res
-      .status(404)
-      .json({ ok: false, message: "Orden no encontrada." });
+// READ: Para pantalla de cocina - Pedidos en cocina
+app.get("/api/orders/in-kitchen", async (req, res) => {
+  try {
+    const orders = await Order.find({ status: "in_kitchen" })
+      .sort({ sent_to_kitchen_at: -1 })
+      .lean();
+    
+    res.json({ 
+      ok: true,
+      orders: orders.map(o => ({
+        ...o,
+        id: o._id.toString(),
+        _id: undefined
+      }))
+    });
+  } catch (err) {
+    console.error("Error in GET /api/orders/in-kitchen:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al obtener pedidos en cocina.",
+      error: err.message 
+    });
   }
-  order.status = "delivered";
-  order.delivered_at = new Date().toISOString();
-  console.log("[ORDERS] Order marked delivered:", order.id);
-  res.json({
-    ok: true,
-    message: `Pedido #${order.id} marcado como entregado.`
-  });
+});
+
+// READ: Pedidos listos o entregados
+app.get("/api/orders/ready", async (req, res) => {
+  try {
+    const orders = await Order.find({ 
+      status: { $in: ["ready", "delivered"] } 
+    })
+      .sort({ ready_at: -1 })
+      .lean();
+    
+    res.json({ 
+      ok: true,
+      orders: orders.map(o => ({
+        ...o,
+        id: o._id.toString(),
+        _id: undefined
+      }))
+    });
+  } catch (err) {
+    console.error("Error in GET /api/orders/ready:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al obtener pedidos listos.",
+      error: err.message 
+    });
+  }
+});
+
+// UPDATE: Mesero aprueba → pasa a cocina
+app.post("/api/orders/:id/send-to-kitchen", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (!order) {
+      return res.status(404).json({ 
+        ok: false, 
+        message: "Orden no encontrada." 
+      });
+    }
+
+    order.status = "in_kitchen";
+    order.sent_to_kitchen_at = new Date();
+    await order.save();
+    
+    console.log(`[ORDERS] Order #${order.orderNumber} sent to kitchen`);
+    
+    res.json({ 
+      ok: true, 
+      message: `Pedido #${order.orderNumber} enviado a cocina.`,
+      order: order.toJSON()
+    });
+  } catch (err) {
+    console.error("Error in send-to-kitchen:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al enviar a cocina.",
+      error: err.message 
+    });
+  }
+});
+
+// UPDATE: Cocina marca como listo
+app.post("/api/orders/:id/mark-ready", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (!order) {
+      return res.status(404).json({ 
+        ok: false, 
+        message: "Orden no encontrada." 
+      });
+    }
+
+    order.status = "ready";
+    order.ready_at = new Date();
+    await order.save();
+    
+    console.log(`[ORDERS] Order #${order.orderNumber} marked ready`);
+    
+    res.json({ 
+      ok: true, 
+      message: `Pedido #${order.orderNumber} marcado como listo.`,
+      order: order.toJSON()
+    });
+  } catch (err) {
+    console.error("Error in mark-ready:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al marcar como listo.",
+      error: err.message 
+    });
+  }
+});
+
+// UPDATE: Mesero marca como entregado
+app.post("/api/orders/:id/mark-delivered", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (!order) {
+      return res.status(404).json({ 
+        ok: false, 
+        message: "Orden no encontrada." 
+      });
+    }
+
+    order.status = "delivered";
+    order.delivered_at = new Date();
+    await order.save();
+    
+    console.log(`[ORDERS] Order #${order.orderNumber} marked delivered`);
+    
+    res.json({
+      ok: true,
+      message: `Pedido #${order.orderNumber} marcado como entregado.`,
+      order: order.toJSON()
+    });
+  } catch (err) {
+    console.error("Error in mark-delivered:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al marcar como entregado.",
+      error: err.message 
+    });
+  }
+});
+
+// DELETE: Cancelar/eliminar orden
+app.delete("/api/orders/:id", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (!order) {
+      return res.status(404).json({ 
+        ok: false, 
+        message: "Orden no encontrada." 
+      });
+    }
+
+    const orderNum = order.orderNumber;
+    await Order.findByIdAndDelete(req.params.id);
+    
+    console.log(`[ORDERS] Order #${orderNum} deleted`);
+    
+    res.json({
+      ok: true,
+      message: `Pedido #${orderNum} eliminado.`
+    });
+  } catch (err) {
+    console.error("Error in delete order:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al eliminar la orden.",
+      error: err.message 
+    });
+  }
 });
 
 // --- Arrancar servidor ---

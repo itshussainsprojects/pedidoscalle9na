@@ -182,7 +182,8 @@
         const title = document.createElement("div");
         title.className = "order-title";
         const mesa = order.table || "?";
-        title.textContent = `Mesa ${mesa} · Pedido #${order.id}`;
+        const orderNum = order.orderNumber || order.id;
+        title.textContent = `Mesa ${mesa} · Pedido #${orderNum}`;
         div.appendChild(title);
 
         const cliente = document.createElement("div");
