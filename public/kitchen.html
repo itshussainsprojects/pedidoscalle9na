@@ -116,10 +116,37 @@
   </main>
 
   <script>
+    let isRefreshing = false;
+    let lastOrdersData = {
+      inKitchen: [],
+      ready: []
+    };
+
     async function fetchJson(url, options = {}) {
-      const res = await fetch(url, options);
-      if (!res.ok) throw new Error("HTTP " + res.status + " " + url);
-      return res.json();
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        
+        const res = await fetch(url, {
+          ...options,
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) {
+          throw new Error("HTTP " + res.status + " " + url);
+        }
+        
+        return res.json();
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          console.error('Request timeout:', url);
+          throw new Error('Request timeout');
+        }
+        console.error('Fetch error:', err);
+        throw err;
+      }
     }
 
     function formatItems(order) {
@@ -202,6 +229,11 @@
           btn.className = "btn-small btn-ready";
           btn.textContent = "Marcar listo";
           btn.addEventListener("click", async () => {
+            // Prevent double-click
+            if (btn.disabled) return;
+            btn.disabled = true;
+            btn.textContent = "Marcando...";
+            
             try {
               await fetchJson(`/api/orders/${order.id}/mark-ready`, {
                 method: "POST"
@@ -209,7 +241,9 @@
               await refreshOrders();
             } catch (err) {
               console.error("Error mark-ready:", err);
-              alert("Error al marcar listo.");
+              alert("⚠️ Error al marcar listo. Inténtalo de nuevo.");
+              btn.disabled = false;
+              btn.textContent = "Marcar listo";
             }
           });
           div.appendChild(btn);
@@ -220,30 +254,54 @@
     }
 
     async function refreshOrders() {
+      // Prevent multiple simultaneous refreshes
+      if (isRefreshing) {
+        console.log('Refresh already in progress, skipping...');
+        return;
+      }
+
+      isRefreshing = true;
+
       try {
         const [inKitchen, ready] = await Promise.all([
           fetchJson("/api/orders/in-kitchen"),
           fetchJson("/api/orders/ready")
         ]);
 
-        renderOrderList("prep-list", inKitchen.orders, {
+        // Cache the successful response
+        lastOrdersData = {
+          inKitchen: inKitchen.orders || [],
+          ready: ready.orders || []
+        };
+
+        renderOrderList("prep-list", lastOrdersData.inKitchen, {
           emptyText: "No hay pedidos en cocina.",
           showReadyButton: true,
           timeField: "sent_to_kitchen_at",
           timeLabel: "En cocina desde"
         });
 
-        renderOrderList("ready-list", ready.orders, {
+        renderOrderList("ready-list", lastOrdersData.ready, {
           emptyText: "No hay pedidos listos.",
           timeField: "ready_at",
           timeLabel: "Listo desde"
         });
       } catch (err) {
         console.error("Error refreshing kitchen orders:", err);
-        // Show error message to user
-        const errorMsg = "⚠️ Error de conexión. Reintentando...";
-        document.getElementById("prep-list").textContent = errorMsg;
-        document.getElementById("ready-list").textContent = errorMsg;
+        
+        // Show error message but keep displaying last known good data
+        const errorMsg = "⚠️ Error de conexión. Mostrando últimos datos...";
+        
+        // Only show error if we have no cached data
+        if (lastOrdersData.inKitchen.length === 0 && lastOrdersData.ready.length === 0) {
+          document.getElementById("prep-list").innerHTML = 
+            `<div style="color: #fb923c; padding: 1rem;">${errorMsg}</div>`;
+          document.getElementById("ready-list").innerHTML = 
+            `<div style="color: #fb923c; padding: 1rem;">${errorMsg}</div>`;
+        }
+        // If we have cached data, keep showing it (silent retry)
+      } finally {
+        isRefreshing = false;
       }
     }
 

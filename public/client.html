@@ -902,13 +902,25 @@
       menuEmpty.textContent = "Cargando menú...";
 
       try {
-        const res = await fetch("/api/menu");
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        const res = await fetch("/api/menu", {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
         if (!res.ok) {
           throw new Error("HTTP " + res.status);
         }
 
         const data = await res.json();
         const items = Array.isArray(data) ? data : data.items || [];
+
+        if (items.length === 0) {
+          throw new Error("No hay ítems en el menú");
+        }
 
         state.menuItems = items;
 
@@ -923,7 +935,26 @@
         const menuContainer = document.getElementById("menu-content");
         menuContainer.innerHTML = "";
         menuEmpty.style.display = "block";
-        menuEmpty.textContent = "Error al cargar el menú.";
+        
+        if (err.name === 'AbortError') {
+          menuEmpty.innerHTML = `
+            <div style="color: #fb923c; padding: 1rem; text-align: center;">
+              ⚠️ Tiempo de espera agotado.<br>
+              <button onclick="location.reload()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                Reintentar
+              </button>
+            </div>
+          `;
+        } else {
+          menuEmpty.innerHTML = `
+            <div style="color: #fb923c; padding: 1rem; text-align: center;">
+              ⚠️ Error al cargar el menú: ${err.message}<br>
+              <button onclick="location.reload()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                Reintentar
+              </button>
+            </div>
+          `;
+        }
       }
     }
 
@@ -977,18 +1008,29 @@
       }
 
       const payload = buildOrderPayload();
+      
+      // Show loading state
+      statusEl.textContent = "Enviando pedido...";
+      statusEl.className = "";
 
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for order submission
+
         const res = await fetch("/api/orders", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: controller.signal
         });
 
+        clearTimeout(timeoutId);
+
         if (!res.ok) {
-          throw new Error("HTTP " + res.status);
+          const errorText = await res.text();
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
         }
 
         const data = await res.json();
@@ -998,9 +1040,20 @@
 
         state.orderItems = [];
         renderOrder();
+        
+        // Clear form fields
+        document.getElementById("order-name").value = "";
+        document.getElementById("order-comments").value = "";
+        document.getElementById("order-allergies").value = "";
+        
       } catch (err) {
         console.error("Error sending order:", err);
-        statusEl.textContent = "Error al enviar el pedido.";
+        
+        if (err.name === 'AbortError') {
+          statusEl.textContent = "⚠️ Tiempo de espera agotado. Inténtalo de nuevo.";
+        } else {
+          statusEl.textContent = `⚠️ Error: ${err.message}`;
+        }
         statusEl.className = "status-error";
       }
     }
