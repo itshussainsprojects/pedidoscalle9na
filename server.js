@@ -14,6 +14,8 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 // --- Auto-cleanup: Delete orders older than 24 hours ---
+const Counter = require('./models/Counter');
+
 async function cleanupOldOrders() {
   try {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
@@ -24,6 +26,19 @@ async function cleanupOldOrders() {
     
     if (result.deletedCount > 0) {
       console.log(`🗑️ Cleaned up ${result.deletedCount} orders older than 24 hours`);
+      
+      // Check if any orders remain
+      const remainingOrders = await Order.countDocuments();
+      
+      if (remainingOrders === 0) {
+        // No orders left, reset counter to 0
+        await Counter.findByIdAndUpdate(
+          'orderNumber',
+          { seq: 0 },
+          { upsert: true }
+        );
+        console.log('🔄 Counter reset to 0 (no orders remaining)');
+      }
     }
   } catch (err) {
     console.error('❌ Error cleaning up old orders:', err);
@@ -401,6 +416,18 @@ app.delete("/api/orders/:id", async (req, res) => {
     
     console.log(`[ORDERS] Order #${orderNum} deleted`);
     
+    // Check if any orders remain
+    const remainingOrders = await Order.countDocuments();
+    if (remainingOrders === 0) {
+      // Reset counter if no orders left
+      await Counter.findByIdAndUpdate(
+        'orderNumber',
+        { seq: 0 },
+        { upsert: true }
+      );
+      console.log('🔄 Counter reset to 0 (all orders deleted)');
+    }
+    
     res.json({
       ok: true,
       message: `Pedido #${orderNum} eliminado.`
@@ -410,6 +437,31 @@ app.delete("/api/orders/:id", async (req, res) => {
     res.status(500).json({ 
       ok: false, 
       message: "Error al eliminar la orden.",
+      error: err.message 
+    });
+  }
+});
+
+// UTILITY: Reset order counter (for admin/testing)
+app.post("/api/orders/reset-counter", async (req, res) => {
+  try {
+    await Counter.findByIdAndUpdate(
+      'orderNumber',
+      { seq: 0 },
+      { upsert: true }
+    );
+    
+    console.log('🔄 Order counter manually reset to 0');
+    
+    res.json({
+      ok: true,
+      message: "Contador de pedidos reiniciado. El próximo pedido será #1."
+    });
+  } catch (err) {
+    console.error("Error resetting counter:", err);
+    res.status(500).json({ 
+      ok: false, 
+      message: "Error al reiniciar el contador.",
       error: err.message 
     });
   }
